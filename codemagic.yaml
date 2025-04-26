@@ -1,6 +1,6 @@
 workflows:
   flutter-app-workflow:
-    name: Flutter App Build
+    name: Flutter App Build (Android + iOS)
     environment:
       flutter: stable
       xcode: latest
@@ -10,4 +10,4 @@ workflows:
       - flutter build ios --release --no-codesign
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
-      - build/ios/ipa
+      - build/ios/iphoneos/Runner.app
