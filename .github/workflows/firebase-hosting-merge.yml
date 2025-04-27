@@ -56,7 +56,6 @@ jobs:
 
       - name: Build APK from project root
         run: |
-          cd MyFlutterApp
           flutter build apk --release --ignore-deprecation
 
       - name: Upload APK
