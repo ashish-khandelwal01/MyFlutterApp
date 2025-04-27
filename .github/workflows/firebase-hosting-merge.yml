@@ -13,6 +13,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./  # Ensure the working directory is correct.
 
     steps:
       - name: Checkout Repository
@@ -22,7 +25,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.10.5'
-          cache: true
+          cache: true  # ✅ Enable Flutter cache automatically
 
       - name: Restore pub cache
         uses: actions/cache@v3
@@ -51,24 +54,15 @@ jobs:
       - name: Verify android manifest path
         run: ls -R android/app/src/main/
 
-      - name: Ensure Gradle wrapper exists
-        run: |
-          if [ ! -f android/gradle/wrapper/gradle-wrapper.jar ]; then
-            echo "Gradle wrapper not found, initializing Gradle wrapper..."
-            cd android
-            flutter pub get
-            ./gradlew wrapper --gradle-version 8.14
-            cd ..
-          fi
-
       - name: Make gradlew executable
-        run: chmod +x android/gradlew  # Ensure the gradlew script is executable.
+        run: |
+          cd android  # Navigate to the android directory
+          chmod +x gradlew  # Ensure the gradlew script is executable.
 
       - name: Clean Gradle build
         run: |
-          cd android
+          cd android  # Ensure we're in the android directory
           ./gradlew clean  # Run Gradle clean using the wrapper.
-          cd ..
 
       - name: Build APK from project root
         run: |
