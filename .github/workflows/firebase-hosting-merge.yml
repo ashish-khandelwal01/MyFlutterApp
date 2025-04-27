@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-        # Build Web
+      # Build Web
       - name: Build Web App
         run: flutter build web --base-href /MyFlutterApp/
 
@@ -35,36 +35,54 @@ jobs:
           personal_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           publish_dir: build/web
 
+      # List android directory for debugging purposes
       - name: List android directory
         run: ls -R android
+
+      # Install Android SDK command-line tools
       - name: Install Android SDK command-line tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip
-          wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-          unzip commandlinetools-linux-8512546_latest.zip -d /usr/local/lib/android-sdk
-          sudo rm commandlinetools-linux-8512546_latest.zip
-          yes | sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager --sdk_root=/usr/local/lib/android-sdk --licenses
-          sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager --update
+          sudo apt-get install -y wget unzip
+          
+          # Download the command-line tools
+          wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O commandlinetools.zip
+          
+          # Unzip the tools to the correct directory
+          sudo unzip commandlinetools.zip -d /usr/local/lib/android-sdk/cmdline-tools
+          sudo rm commandlinetools.zip
+          
+          # Accept Android licenses and update tools
+          yes | sdkmanager --sdk_root=/usr/local/lib/android-sdk --licenses
+          sdkmanager --update
 
+      # Install required SDK components
       - name: Install required SDK components
         run: |
-          sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager --update
-          sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          
+          # Accept licenses for SDK components
+          yes | sdkmanager --licenses
 
+      # Accept Android licenses to allow Flutter to build for Android
       - name: Accept Android licenses
         run: yes | flutter doctor --android-licenses
 
+      # Set Android SDK path in GitHub environment
       - name: Set Android SDK path
         run: |
-          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "ANDROID_HOME=/usr/local/lib/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/usr/local/lib/android-sdk" >> $GITHUB_ENV
+
+      # Run flutter doctor for verification
       - name: Flutter doctor
         run: flutter doctor -v
+
       # Build Android APK
       - name: Build Android APK
         run: flutter build apk --release
 
+      # Upload APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
