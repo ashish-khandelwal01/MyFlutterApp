@@ -34,11 +34,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           personal_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           publish_dir: build/web
-
-      - name: List android directory
-        run: ls -R android
-      - name: Flutter doctor
-        run: flutter doctor -v
+            
       # Build Android APK
       - name: Build Android APK
         run: flutter build apk --release
