@@ -54,10 +54,6 @@ jobs:
       - name: Verify android manifest path
         run: ls -R android/app/src/main/
 
-      - name: Create symlink for AndroidManifest.xml
-        run: |
-          ln -s android/app/src/main/AndroidManifest.xml android/AndroidManifest.xml
-
       - name: Build APK from project root
         run: |
           flutter clean
