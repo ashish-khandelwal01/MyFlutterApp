@@ -51,13 +51,9 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      - name: Verify android directory structure
-        run: |
-          echo "Listing android directory:"
-          ls -R android
-
       - name: Change directory to android
         run: cd android
+
 
       - name: Build Android APK
         run: flutter build apk --release --ignore-deprecation
