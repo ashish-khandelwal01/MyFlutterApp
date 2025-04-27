@@ -35,32 +35,8 @@ jobs:
       - name: Install Flutter dependencies
         run: flutter pub get
 
-      - name: Install required Android SDK components
-        run: |
-          sudo yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-
-      - name: Set Android SDK environment variables
-        run: |
-          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-
       - name: Flutter doctor
         run: flutter doctor -v
-
-      - name: Verify android manifest path
-        run: ls -R android/app/src/main/
-
-      - name: Build APK from project root
-        run: |
-          cd android/app/src/main/
-          flutter build apk --release --ignore-deprecation
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Build Web App
         run: flutter build web --base-href /MyFlutterApp/
