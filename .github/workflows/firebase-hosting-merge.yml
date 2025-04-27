@@ -51,16 +51,13 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      - name: Verify android directory structure
+      - name: Verify android manifest path
+        run: ls -R android/app/src/main/
+
+      - name: Build APK from project root
         run: |
-          echo "Listing android directory:"
-          ls -R android
-
-      - name: Change directory to android
-        run: cd android
-
-      - name: Build Android APK
-        run: flutter build apk --release --ignore-deprecation
+          cd MyFlutterApp
+          flutter build apk --release --ignore-deprecation
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
