@@ -51,26 +51,38 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
+      # Verify android manifest path
       - name: Verify android manifest path
         run: ls -R android/app/src/main/
 
+      # Create symlink for AndroidManifest.xml
       - name: Create symlink for AndroidManifest.xml
         run: |
-          ln -s android/app/src/main/AndroidManifest.xml android/AndroidManifest.xml
+          echo "Creating symlink for AndroidManifest.xml"
+          ln -sf android/app/src/main/AndroidManifest.xml android/AndroidManifest.xml
 
+      # Clean Gradle build
+      - name: Clean Gradle build
+        run: |
+          ./gradlew clean
+
+      # Build APK from project root
       - name: Build APK from project root
         run: |
           flutter build apk --release --ignore-deprecation
 
+      # Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+      # Build Web App
       - name: Build Web App
         run: flutter build web --base-href /MyFlutterApp/
 
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
