@@ -56,10 +56,12 @@ jobs:
 
       - name: Make gradlew executable
         run: |
+          cd android  # Navigate to the android directory
           chmod +x gradlew  # Ensure the gradlew script is executable.
 
       - name: Clean Gradle build
         run: |
+          cd android  # Ensure we're in the android directory
           ./gradlew clean  # Run Gradle clean using the wrapper.
 
       - name: Build APK from project root
