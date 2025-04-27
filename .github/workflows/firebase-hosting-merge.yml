@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
 permissions:
   checks: write
   contents: write
@@ -21,10 +22,31 @@ jobs:
         with:
           flutter-version: '3.10.5'
 
-      - name: Install Dependencies
+      - name: Install Flutter dependencies
         run: flutter pub get
 
-      # Build Web
+      - name: Install required Android SDK components
+        run: |
+          sudo yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
+      - name: Set Android SDK environment variables
+        run: |
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
       - name: Build Web App
         run: flutter build web --base-href /MyFlutterApp/
 
@@ -34,63 +56,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           personal_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           publish_dir: build/web
-
-      # List android directory for debugging purposes
-      - name: List android directory
-        run: ls -R android
-
-      # Install Android SDK command-line tools
-      - name: Install Android SDK command-line tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          
-          # Create the necessary directory for command-line tools if it doesn't exist
-          sudo mkdir -p /usr/local/lib/android-sdk/cmdline-tools
-          
-          # Download the command-line tools
-          wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O commandlinetools.zip
-          
-          # Unzip the tools to the correct directory
-          sudo unzip commandlinetools.zip -d /usr/local/lib/android-sdk/cmdline-tools
-          sudo rm commandlinetools.zip
-          
-          # Set up the SDK Manager path
-          sudo ln -s /usr/local/lib/android-sdk/cmdline-tools/cmdline-tools/bin/sdkmanager /usr/local/bin/sdkmanager
-    
-          # Accept Android licenses and update tools
-          yes | sdkmanager --sdk_root=/usr/local/lib/android-sdk --licenses
-          sdkmanager --update
-
-      # Install required SDK components
-      - name: Install required SDK components
-        run: |
-          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
-          
-          # Accept licenses for SDK components
-          yes | sdkmanager --licenses
-
-      # Accept Android licenses to allow Flutter to build for Android
-      - name: Accept Android licenses
-        run: yes | flutter doctor --android-licenses
-
-      # Set Android SDK path in GitHub environment
-      - name: Set Android SDK path
-        run: |
-          echo "ANDROID_HOME=/usr/local/lib/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=/usr/local/lib/android-sdk" >> $GITHUB_ENV
-
-      # Run flutter doctor for verification
-      - name: Flutter doctor
-        run: flutter doctor -v
-
-      # Build Android APK
-      - name: Build Android APK
-        run: flutter build apk --release
-
-      # Upload APK artifact
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
