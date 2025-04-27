@@ -11,7 +11,7 @@ const RESOURCES = {"assets/AssetManifest.json": "34a5738300ceca925d1600dec3f20b2
 "assets/assets/image3.jpg": "3814d21a69c4a8d2f26886f32860d1df",
 "assets/assets/image7.png": "681f5dea82d66586e510f4f9a899a5c6",
 "assets/assets/image8.jpg": "2ee8a13a20038521d98df70c74ee9861",
-"assets/assets/icon/app_icon.png": "d728002ca19e7ba76aed3880df3cc07b",
+"assets/assets/icon/app_icon.png": "efcb7d270a985e01dd62b7e236b2d5bc",
 "assets/assets/image2.jpg": "124097ff4c1ce28a872b943865e0e1a3",
 "assets/assets/image1.png": "a6b0c8fe87db153e9037826177e28a2d",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
