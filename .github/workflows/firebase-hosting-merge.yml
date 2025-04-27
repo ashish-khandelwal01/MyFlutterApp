@@ -37,23 +37,8 @@ jobs:
 
       - name: List android directory
         run: ls -R android
-      - name: Install Android SDK command-line tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
-          wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-          unzip commandlinetools-linux-8512546_latest.zip -d /usr/local/lib/android-sdk
-          sudo rm commandlinetools-linux-8512546_latest.zip
-          yes | sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager --sdk_root=/usr/local/lib/android-sdk --licenses
-          sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager --update
-
-      - name: Install required SDK components
-        run: |
-          sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager --update
-          sudo /usr/local/lib/android-sdk/tools/bin/sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
-
       - name: Accept Android licenses
-        run: yes | flutter doctor --android-licenses
+        run: flutter doctor --android-licenses
 
       - name: Set Android SDK path
         run: |
