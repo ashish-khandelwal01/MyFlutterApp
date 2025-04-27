@@ -55,6 +55,9 @@ jobs:
           sudo unzip commandlinetools.zip -d /usr/local/lib/android-sdk/cmdline-tools
           sudo rm commandlinetools.zip
           
+          # Set up the SDK Manager path
+          sudo ln -s /usr/local/lib/android-sdk/cmdline-tools/cmdline-tools/bin/sdkmanager /usr/local/bin/sdkmanager
+    
           # Accept Android licenses and update tools
           yes | sdkmanager --sdk_root=/usr/local/lib/android-sdk --licenses
           sdkmanager --update
