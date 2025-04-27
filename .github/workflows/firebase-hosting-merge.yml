@@ -51,27 +51,9 @@ jobs:
       - name: Verify android manifest path
         run: ls -R android/app/src/main/
 
-      - name: Ensure Gradle wrapper exists
-        run: |
-          if [ ! -f android/gradle/wrapper/gradle-wrapper.jar ]; then
-            echo "Gradle wrapper not found, initializing Gradle wrapper..."
-            cd android
-            flutter pub get
-            ./gradlew wrapper --gradle-version 8.14
-            cd ..
-          fi
-
-      - name: Make gradlew executable
-        run: chmod +x android/gradlew  # Ensure the gradlew script is executable.
-
-      - name: Clean Gradle build
-        run: |
-          cd android
-          ./gradlew clean  # Run Gradle clean using the wrapper.
-          cd ..
-
       - name: Build APK from project root
         run: |
+          cd android/app/src/main/
           flutter build apk --release --ignore-deprecation
 
       - name: Upload APK
