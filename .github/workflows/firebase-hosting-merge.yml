@@ -45,9 +45,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget unzip
           
-          # Create the necessary directory for command-line tools if it doesn't exist
-          sudo mkdir -p /usr/local/lib/android-sdk/cmdline-tools
-          
           # Download the command-line tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O commandlinetools.zip
           
