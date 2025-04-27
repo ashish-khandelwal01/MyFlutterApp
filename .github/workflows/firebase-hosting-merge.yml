@@ -51,6 +51,10 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
+      - name: Change directory to android
+        run: cd android
+
+
       - name: Build Android APK
         run: flutter build apk --release --ignore-deprecation
 
