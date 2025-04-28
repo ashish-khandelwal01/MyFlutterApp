@@ -7,7 +7,5 @@ workflows:
     scripts:
       - flutter pub get
       - flutter build apk --release
-      - flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
-      - build/ios/ipa/*.ipa

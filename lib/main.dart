@@ -1,148 +1,213 @@
-import 'package:flutter/material.dart';
+/**
+ * Bug Bug App - Main Entry Point
+ *
+ * This file serves as the entry point for the Bug Bug App.
+ * It initializes the MaterialApp and sets up:
+ *  - Animated Floating Hearts: Smooth heart animation using TweenAnimationBuilder.
+ *  - Background Music: Looped music playback with auto-play on mobile and a play button on web.
+ *  - Image Galleries: Displays swipeable image galleries with captions.
+ *
+ * Make sure assets (music and images) are properly configured in pubspec.yaml.
+ */
 
-/// The main entry point of the Flutter application.
+import 'dart:async';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart'; // For background music
+import 'package:flutter/foundation.dart' show kIsWeb; // Added for web check
+
 void main() {
   runApp(const MyApp());
 }
 
 /// The root widget of the application.
+/// Builds a MaterialApp with a specific theme and the home page.
 class MyApp extends StatelessWidget {
-  /// Creates a [MyApp] widget.
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bug Bug', // The title of the application.
+      title: 'Bug Bug',
       theme: ThemeData(
-        // Defines the theme of the application using Material 3.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Bug Bug App'), // The home screen of the app.
+      home: const MyHomePage(title: 'Bug Bug App'),
     );
   }
 }
 
-/// The home page of the application.
-class MyHomePage extends StatelessWidget {
-  /// Creates a [MyHomePage] widget.
-  ///
-  /// [title] is the title displayed in the app bar.
+/// A stateful widget representing the home page of the application.
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  /// The title of the home page.
   final String title;
 
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+/// State for MyHomePage widget.
+/// Handles background music playback and UI interactions.
+class _MyHomePageState extends State<MyHomePage> {
+  late AudioPlayer _audioPlayer;
+  bool _musicStarted = false; // Added flag for web audio start
+
+  /// Initializes state, sets up the audio player, and auto-starts music on non-web platforms.
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+    if (!kIsWeb) {
+      _playBackgroundMusic(); // Autoplay on non-web platforms
+      _musicStarted = true;
+    }
+  }
+
+  /// Asynchronously configures and starts playing the background music.
+  void _playBackgroundMusic() async {
+    await _audioPlayer.setSource(AssetSource('music/audio.mp3')); // Make sure to add your music in the assets
+    await _audioPlayer.setVolume(0.5); // Set volume
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Set to loop
+    await _audioPlayer.resume(); // Start playing
+  }
+
+  /// Disposes of resources by stopping the audio player.
+  @override
+  void dispose() {
+    _audioPlayer.stop(); // Stop music when leaving the page
+    super.dispose();
+  }
+
+  /// Builds the UI for the home page including the app bar, animated hearts, buttons, and optionally a play button on web.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title), // Displays the title in the app bar.
-      ),
-      body: Container(
-        // Adds a gradient background to the body.
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.deepOrange, Colors.redAccent],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        backgroundColor: Colors.pinkAccent.shade100,
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+            color: Colors.deepPurple,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        child: Center(
-          // Centers the row of buttons.
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Button for navigating to the "Bugudi" gallery screen.
-              _buildSquareButton(
-                context,
-                'Bugudi 😘😘',
-                const ImageGalleryScreen(
-                  images: [
-                    'assets/image1.png',
-                    'assets/image2.jpg',
-                    'assets/image3.jpg',
-                  ],
-                  captions: ['I love you 😘', 'Ankhain teri ❤️', 'Janu meri Jaan'],
-                  description: 'Bugudi 😘😘',
-                ),
-              ),
-              const SizedBox(width: 20), // Adds spacing between buttons.
-              // Button for navigating to the "Bubu" gallery screen.
-              _buildSquareButton(
-                context,
-                'Bubu',
-                const ImageGalleryScreen(
-                  images: [
-                    'assets/image4.jpg',
-                    'assets/image5.jpg',
-                    'assets/image6.jpg',
-                  ],
-                  captions: ['Yours', 'Only Yours', 'I love you'],
-                  description: 'Bubu',
-                ),
-              ),
-              const SizedBox(width: 20), // Adds spacing between buttons.
-              // Button for navigating to the "Us" gallery screen.
-              _buildSquareButton(
-                context,
-                'Us ❤️',
-                const ImageGalleryScreen(
-                  images: [
-                    'assets/image7.png',
-                    'assets/image8.jpg',
-                  ],
-                  captions: ['Mine Forever', 'and ever'],
-                  description: 'Us ❤️',
-                ),
-              ),
-            ],
-          ),
-        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.deepPurple),
       ),
+      body: Stack(
+        children: [
+          const Positioned.fill(child: FloatingHearts()), // 🎈 Floating hearts
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "I Love You Forever ❤️",
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                    fontFamily: 'DancingScript',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  children: [
+                    _buildCuteButton(
+                      context,
+                      'Bugudi 😘😘',
+                      const ImageGalleryScreen(
+                        images: [
+                          'assets/image1.png',
+                          'assets/image2.jpg',
+                          'assets/image3.jpg',
+                        ],
+                        captions: ['I love you 😘', 'Ankhain teri ❤️', 'Janu meri Jaan'],
+                        description: 'Bugudi 😘😘',
+                      ),
+                    ),
+                    _buildCuteButton(
+                      context,
+                      'Bubu',
+                      const ImageGalleryScreen(
+                        images: [
+                          'assets/image4.jpg',
+                          'assets/image5.jpg',
+                          'assets/image6.jpg',
+                        ],
+                        captions: ['Yours', 'Only Yours', 'Forever Yours'],
+                        description: 'Bubu',
+                      ),
+                    ),
+                    _buildCuteButton(
+                      context,
+                      'Us ❤️',
+                      const ImageGalleryScreen(
+                        images: [
+                          'assets/image7.png',
+                          'assets/image8.jpg',
+                        ],
+                        captions: ['Mine Forever', 'and ever'],
+                        description: 'Us ❤️',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      // Play button for web platforms to trigger audio on user interaction.
+      floatingActionButton: kIsWeb && !_musicStarted
+          ? FloatingActionButton(
+              onPressed: () {
+                _playBackgroundMusic();
+                setState(() {
+                  _musicStarted = true;
+                });
+              },
+              child: const Icon(Icons.play_arrow),
+            )
+          : null,
     );
   }
 
-  /// Builds a square-shaped button with a custom style.
-  ///
-  /// [context] is the build context.
-  /// [text] is the label displayed on the button.
-  /// [screen] is the screen to navigate to when the button is pressed.
-  Widget _buildSquareButton(BuildContext context, String text, Widget screen) {
+  /// Creates a styled button that navigates to the provided screen with a slide transition.
+  static Widget _buildCuteButton(BuildContext context, String text, Widget screen) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        fixedSize: const Size(100, 100), // Sets the button size.
+        fixedSize: const Size(100, 100),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15), // Adds rounded corners.
+          borderRadius: BorderRadius.circular(20),
         ),
-        backgroundColor: Colors.white.withOpacity(0.8), // Button background color.
-        foregroundColor: Colors.deepPurple, // Button text color.
-        elevation: 10, // Adds shadow to the button.
-        shadowColor: Colors.deepPurpleAccent, // Shadow color.
+        backgroundColor: Colors.white.withOpacity(0.9),
+        foregroundColor: Colors.pinkAccent,
+        elevation: 8,
+        shadowColor: Colors.pinkAccent.withOpacity(0.5),
       ),
       onPressed: () {
-        // Navigates to the specified screen with a slide transition.
         Navigator.push(
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => screen,
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0); // Slide in from the right.
+              const begin = Offset(0.0, 1.0); // Slide up
               const end = Offset.zero;
               const curve = Curves.easeInOut;
-
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-              var offsetAnimation = animation.drive(tween);
-
+              final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              final offsetAnimation = animation.drive(tween);
               return SlideTransition(position: offsetAnimation, child: child);
             },
           ),
         );
       },
       child: Text(
-        text, // Button label.
+        text,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,
       ),
@@ -151,12 +216,8 @@ class MyHomePage extends StatelessWidget {
 }
 
 /// A screen that displays an image gallery with captions.
+/// Uses a PageView to allow users to swipe through images.
 class ImageGalleryScreen extends StatelessWidget {
-  /// Creates an [ImageGalleryScreen] widget.
-  ///
-  /// [images] is the list of image asset paths.
-  /// [description] is the title of the screen.
-  /// [captions] is the list of captions for each image.
   const ImageGalleryScreen({
     super.key,
     required this.images,
@@ -164,50 +225,42 @@ class ImageGalleryScreen extends StatelessWidget {
     required this.captions,
   });
 
-  /// The list of image asset paths.
   final List<String> images;
-
-  /// The title of the screen.
   final String description;
-
-  /// The list of captions for each image.
   final List<String> captions;
 
+  /// Builds a scaffold containing an AppBar and a swipable gallery of images and captions.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(description), // Displays the screen title in the app bar.
-        backgroundColor: Colors.deepPurple,
+        title: Text(
+          description,
+          style: const TextStyle(color: Colors.deepPurple),
+        ),
+        backgroundColor: Colors.pinkAccent.shade100,
+        iconTheme: const IconThemeData(color: Colors.deepPurple),
       ),
       body: Container(
-        // Adds a gradient background to the gallery screen.
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.purpleAccent, Colors.deepPurple],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
-        ),
+        color: const Color(0xFFFDE2E4),
         child: PageView.builder(
-          itemCount: images.length, // Number of images in the gallery.
+          itemCount: images.length,
           itemBuilder: (context, index) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  // Displays the image.
                   child: Image.asset(
                     images[index],
                     fit: BoxFit.cover,
                     width: double.infinity,
                   ),
                 ),
-                const SizedBox(height: 20), // Adds spacing below the image.
+                const SizedBox(height: 20),
                 Text(
-                  captions[index], // Displays the caption for the image.
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
+                  captions[index],
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Colors.deepPurple,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -218,5 +271,67 @@ class ImageGalleryScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// A widget that displays animated floating hearts across the screen.
+class FloatingHearts extends StatefulWidget {
+  const FloatingHearts({Key? key}) : super(key: key);
+
+  @override
+  _FloatingHeartsState createState() => _FloatingHeartsState();
+}
+
+class _FloatingHeartsState extends State<FloatingHearts> {
+  final List<Widget> _hearts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _startAddingHearts();
+  }
+
+  void _startAddingHearts() {
+    Timer.periodic(const Duration(milliseconds: 800), (timer) {
+      if (mounted) {
+        setState(() {
+          _hearts.add(_buildHeart());
+        });
+      }
+    });
+  }
+
+  Widget _buildHeart() {
+    final random = Random();
+    final double left = random.nextDouble() * MediaQuery.of(context).size.width;
+    final double size = random.nextDouble() * 30 + 20;
+    final int duration = random.nextInt(3000) + 2000;
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: -size, end: MediaQuery.of(context).size.height),
+      duration: Duration(milliseconds: duration),
+      builder: (context, bottomValue, child) {
+        return Positioned(
+          bottom: bottomValue,
+          left: left,
+          child: child!,
+        );
+      },
+      child: Icon(
+        Icons.favorite,
+        color: Colors.pinkAccent.withOpacity(0.7),
+        size: size,
+      ),
+      onEnd: () {
+        setState(() {
+          _hearts.removeAt(0);
+        });
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: _hearts);
   }
 }

@@ -8,7 +8,7 @@ Bug Bug is a Flutter application that features:
   **Note for Web Users:** Audio autoplay is blocked by most browsers. Tap the floating play button to start background music.
 
 ## Setup
-- Ensure that the music file is located at `assets/music/audio.mp3`.
+- Ensure that the music file is located at `assets/music/audio.mp3`.  
 - Update your `pubspec.yaml` assets configuration accordingly.
 - For web deployments, interact with the play button to begin audio playback.
 

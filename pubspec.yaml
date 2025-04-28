@@ -8,12 +8,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # Add any additional dependencies here
+  audioplayers: ^6.4.0
   cupertino_icons: ^1.0.5
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.3
   flutter_test:
     sdk: flutter
 
@@ -24,7 +23,6 @@ flutter_icons:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/image1.png
     - assets/image2.jpg
@@ -35,3 +33,4 @@ flutter:
     - assets/image7.png
     - assets/image8.jpg
     - assets/icon/app_icon.png
+    - assets/music/audio.mp3
