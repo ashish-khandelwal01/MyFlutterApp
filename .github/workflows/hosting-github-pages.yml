@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages and Release APK
 
 on:
   push:
@@ -42,3 +42,27 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           personal_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           publish_dir: build/web
+
+      - name: Upload APK to GitHub Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+          asset_name: app-armeabi-v7a-release.apk
+          asset_content_type: application/vnd.android.package-archive
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
