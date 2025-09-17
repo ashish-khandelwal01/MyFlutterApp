@@ -26,10 +26,10 @@ flutter:
   assets:
     - assets/Anu/image1.png
     - assets/Anu/image2.jpg
-    - assets/Ashish/image3.jpg
+    - assets/Anu/image3.jpg
     - assets/Ashish/image4.jpg
-    - assets/Us/image5.jpg
-    - assets/Us/image6.jpg
+    - assets/Ashish/image5.jpg
+    - assets/Ashish/image6.jpg
     - assets/Us/image7.png
     - assets/Us/image8.jpg
     - assets/Us/image9.jpg
