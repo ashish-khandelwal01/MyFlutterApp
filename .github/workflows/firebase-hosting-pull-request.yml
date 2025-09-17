@@ -15,6 +15,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.10.5'
+      - name: clean up
+        run: flutter clean
       - name: Install Dependencies
         run: flutter pub get
       - name: Build Web App
