@@ -122,9 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Bugudi 😘😘',
                       const ImageGalleryScreen(
                         images: [
-                          'assets/image1.png',
-                          'assets/image2.jpg',
-                          'assets/image3.jpg',
+                          'assets/Anu/image1.png',
+                          'assets/Anu/image2.jpg',
+                          'assets/Anu/image3.jpg',
                         ],
                         captions: ['I love you 😘', 'Ankhain teri ❤️', 'Janu meri Jaan'],
                         description: 'Bugudi 😘😘',
@@ -135,9 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Bubu',
                       const ImageGalleryScreen(
                         images: [
-                          'assets/image4.jpg',
-                          'assets/image5.jpg',
-                          'assets/image6.jpg',
+                          'assets/Ashish/image4.jpg',
+                          'assets/Ashish/image5.jpg',
+                          'assets/Ashish/image6.jpg',
                         ],
                         captions: ['Yours', 'Only Yours', 'Forever Yours'],
                         description: 'Bubu',
@@ -148,8 +148,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Us ❤️',
                       const ImageGalleryScreen(
                         images: [
-                          'assets/image7.png',
-                          'assets/image8.jpg',
+                          'assets/Us/image7.png',
+                          'assets/Us/image8.jpg',
+                          'assets/Us/image9.png',
+                          'assets/Us/image10.png',
+                          'assets/Us/image11.png',
+                          'assets/Us/image12.png',
+                          'assets/Us/image13.png',
+                          'assets/Us/image14.png',
+                          'assets/Us/image15.png',
                         ],
                         captions: ['Mine Forever', 'and ever'],
                         description: 'Us ❤️',
