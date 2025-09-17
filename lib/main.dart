@@ -413,7 +413,7 @@ class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
                           borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
                             widget.images[index],
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             width: double.infinity,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
